@@ -90,6 +90,22 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 "xprop -id $1 -f $0 8s -set $0 \"$prop\"", \
 p, winid, NULL } }
 
+#define SETURI_BM(p)       { .v = (char *[]){ "/bin/sh", "-c", \
+"prop=\"`" SCRIPTS_DIR "surf_bookmarks_dmenu.sh`\" &&" \
+"xprop -id $1 -f $0 8s -set $0 \"$prop\"", \
+p, winid, NULL } }
+
+/* BM_ADD(readprop) */
+#define BM_ADD(r) {\
+        .v = (const char *[]){ "/bin/sh", "-c", \
+             "(echo $(xprop -id $0 $1) | cut -d '\"' -f2 " \
+             "| sed 's/.*https*:\\/\\/\\(www\\.\\)\\?//' && cat ~/.surf/bookmarks.txt) " \
+             "| awk '!seen[$0]++' > ~/.surf/bookmarks.txt.tmp && " \
+             "mv ~/.surf/bookmarks.txt.tmp ~/.surf/bookmarks.txt", \
+             winid, r, NULL \
+        } \
+}
+
 /* styles */
 /*
  * The iteration will stop at the first match, beginning at the beginning of
@@ -120,8 +136,10 @@ static char *editscreen[] = { "/bin/sh", "-c", SCRIPTS_DIR "edit_screen.sh", NUL
  */
 static Key keys[] = {
     /* modifier              keyval          function    arg */
-    { MODKEY,                GDK_KEY_Return  spawn,      SETPROP("_SURF_URI", "_SURF_GO") },
-    { MODKEY,                GDK_KEY_g,      spawn,      SETURI("_SURF_GO") },
+    { MODKEY,                GDK_KEY_Return, spawn,      SETPROP("_SURF_URI", "_SURF_GO") },
+    { MODKEY,                GDK_KEY_t,      spawn,      SETURI("_SURF_GO") },
+    { MODKEY,                GDK_KEY_g,      spawn,      SETURI_BM("_SURF_GO") },
+    { MODKEY,                GDK_KEY_m,      spawn,      BM_ADD("_SURF_URI") },
 
     { MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
 
