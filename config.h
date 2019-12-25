@@ -116,6 +116,8 @@ static Key keys[] = {
     /* modifier              keyval          function    arg */
     { MODKEY,                GDK_KEY_g,      spawn,      SETPROP("_SURF_URI", "_SURF_GO") },
 
+    { MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
+
     { 0,                     GDK_KEY_Escape, stop,       { 0 } },
     { MODKEY,                GDK_KEY_c,      stop,       { 0 } },
 
