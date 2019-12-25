@@ -115,8 +115,6 @@ static char *editscreen[] = { "/bin/sh", "-c", SCRIPTS_DIR "edit_screen.sh", NUL
 static Key keys[] = {
     /* modifier              keyval          function    arg */
     { MODKEY,                GDK_KEY_g,      spawn,      SETPROP("_SURF_URI", "_SURF_GO") },
-    { MODKEY,                GDK_KEY_f,      spawn,      SETPROP("_SURF_FIND", "_SURF_FIND") },
-    { MODKEY,                GDK_KEY_slash,  spawn,      SETPROP("_SURF_FIND", "_SURF_FIND") },
 
     { 0,                     GDK_KEY_Escape, stop,       { 0 } },
     { MODKEY,                GDK_KEY_c,      stop,       { 0 } },
@@ -124,19 +122,18 @@ static Key keys[] = {
     { MODKEY|GDK_SHIFT_MASK, GDK_KEY_r,      reload,     { .b = 1 } },
     { MODKEY,                GDK_KEY_r,      reload,     { .b = 0 } },
 
-    { MODKEY,                GDK_KEY_l,      navigate,   { .i = +1 } },
-    { MODKEY,                GDK_KEY_h,      navigate,   { .i = -1 } },
+    { MODKEY,                GDK_KEY_i,      navigate,   { .i = +1 } },
+    { MODKEY,                GDK_KEY_o,      navigate,   { .i = -1 } },
 
     /* Currently we have to use scrolling steps that WebKit2GTK+ gives us
      * d: step down, u: step up, r: step right, l:step left
      * D: page down, U: page up */
+    { MODKEY,                GDK_KEY_h,      scroll,     { .i = 'l' } },
     { MODKEY,                GDK_KEY_j,      scroll,     { .i = 'd' } },
     { MODKEY,                GDK_KEY_k,      scroll,     { .i = 'u' } },
+    { MODKEY,                GDK_KEY_l,      scroll,     { .i = 'r' } },
+    { MODKEY,                GDK_KEY_f,      scroll,     { .i = 'D' } },
     { MODKEY,                GDK_KEY_b,      scroll,     { .i = 'U' } },
-    { MODKEY,                GDK_KEY_space,  scroll,     { .i = 'D' } },
-    { MODKEY,                GDK_KEY_i,      scroll,     { .i = 'r' } },
-    { MODKEY,                GDK_KEY_u,      scroll,     { .i = 'l' } },
-
 
     { MODKEY|GDK_SHIFT_MASK, GDK_KEY_j,      zoom,       { .i = -1 } },
     { MODKEY|GDK_SHIFT_MASK, GDK_KEY_k,      zoom,       { .i = +1 } },
@@ -147,6 +144,7 @@ static Key keys[] = {
     { MODKEY,                GDK_KEY_p,      clipboard,  { .b = 1 } },
     { MODKEY,                GDK_KEY_y,      clipboard,  { .b = 0 } },
 
+    { MODKEY,                GDK_KEY_slash,  spawn,      SETPROP("_SURF_FIND", "_SURF_FIND") },
     { MODKEY,                GDK_KEY_n,      find,       { .i = +1 } },
     { MODKEY|GDK_SHIFT_MASK, GDK_KEY_n,      find,       { .i = -1 } },
 
@@ -154,7 +152,7 @@ static Key keys[] = {
 
     { MODKEY|GDK_SHIFT_MASK, GDK_KEY_a,      togglecookiepolicy, { 0 } },
     { 0,                     GDK_KEY_F11,    togglefullscreen, { 0 } },
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_o,      toggleinspector, { 0 } },
+    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_u,      toggleinspector, { 0 } },
 
     { MODKEY|GDK_SHIFT_MASK, GDK_KEY_c,      toggle,     { .i = CaretBrowsing } },
     { MODKEY|GDK_SHIFT_MASK, GDK_KEY_f,      toggle,     { .i = FrameFlattening } },
@@ -167,7 +165,7 @@ static Key keys[] = {
 
     { MODKEY,                GDK_KEY_d, externalpipe, { .v = linkselect_curwin } },
     { GDK_SHIFT_MASK|MODKEY, GDK_KEY_d, externalpipe, { .v = linkselect_newwin } },
-    { MODKEY,                GDK_KEY_o, externalpipe, { .v = editscreen        } },
+    { MODKEY,                GDK_KEY_u, externalpipe, { .v = editscreen        } },
 };
 
 /* button definitions */
