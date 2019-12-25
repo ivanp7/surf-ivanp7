@@ -5,6 +5,7 @@ static char *scriptfile     = "~/.surf/script.js";
 static char *styledir       = "~/.surf/styles/";
 static char *cachedir       = "~/.surf/cache/";
 static char *cookiefile     = "~/.surf/cookies.txt";
+static char *historyfile    = "~/.surf/history.txt";
 
 /* Webkit default features */
 static Parameter defconfig[ParameterLast] = {
@@ -45,6 +46,8 @@ static UriParameters uriparams[] = {
 static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
                                     WEBKIT_FIND_OPTIONS_WRAP_AROUND;
 
+#define SCRIPTS_DIR "~/.scripts/xdf/surf/"
+
 #define SETPROP(p, q) { \
         .v = (const char *[]){ "/bin/sh", "-c", \
              "prop=\"`xprop -id $2 $0 " \
@@ -82,6 +85,11 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
         } \
 }
 
+#define SETURI(p)       { .v = (char *[]){ "/bin/sh", "-c", \
+"prop=\"`" SCRIPTS_DIR "surf_history_dmenu.sh`\" &&" \
+"xprop -id $1 -f $0 8s -set $0 \"$prop\"", \
+p, winid, NULL } }
+
 /* styles */
 /*
  * The iteration will stop at the first match, beginning at the beginning of
@@ -93,8 +101,6 @@ static SiteStyle styles[] = {
 };
 
 #define MODKEY GDK_CONTROL_MASK
-
-#define SCRIPTS_DIR "~/.scripts/xdf/surf/"
 
 /* external pipe */
 static char *linkselect_curwin [] = { "/bin/sh", "-c",
@@ -114,7 +120,8 @@ static char *editscreen[] = { "/bin/sh", "-c", SCRIPTS_DIR "edit_screen.sh", NUL
  */
 static Key keys[] = {
     /* modifier              keyval          function    arg */
-    { MODKEY,                GDK_KEY_g,      spawn,      SETPROP("_SURF_URI", "_SURF_GO") },
+    { MODKEY,                GDK_KEY_Return  spawn,      SETPROP("_SURF_URI", "_SURF_GO") },
+    { MODKEY,                GDK_KEY_g,      spawn,      SETURI("_SURF_GO") },
 
     { MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
 

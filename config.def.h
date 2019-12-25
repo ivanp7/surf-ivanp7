@@ -5,6 +5,7 @@ static char *scriptfile     = "~/.surf/script.js";
 static char *styledir       = "~/.surf/styles/";
 static char *cachedir       = "~/.surf/cache/";
 static char *cookiefile     = "~/.surf/cookies.txt";
+static char *historyfile    = "~/.surf/history.txt";
 
 /* Webkit default features */
 static Parameter defconfig[ParameterLast] = {
@@ -82,6 +83,11 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
         } \
 }
 
+#define SETURI(p)       { .v = (char *[]){ "/bin/sh", "-c", \
+"prop=\"`surf_history_dmenu.sh`\" &&" \
+"xprop -id $1 -f $0 8s -set $0 \"$prop\"", \
+p, winid, NULL } }
+
 /* styles */
 /*
  * The iteration will stop at the first match, beginning at the beginning of
@@ -153,6 +159,7 @@ static Key keys[] = {
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_v,      toggle,     { .i = Plugins } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_b,      toggle,     { .i = ScrollBars } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,     { .i = Style } },
+    { MODKEY               , GDK_KEY_Return, spawn,      SETURI("_SURF_GO") },
 };
 
 static char *searchengine = "https://duckduckgo.com/?q=";
