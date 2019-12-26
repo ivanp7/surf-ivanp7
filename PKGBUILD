@@ -22,8 +22,7 @@ conflicts=("$_pkgname")
 source=('arg.h' 'config.h' 'config.mk' 'LICENSE' 'Makefile' 'surf.1' 'surf.c')
 md5sums=('4a06cd509ed479450e36833c6ce2015b' 'SKIP' 
          '4099620f9c40bf1cf10d1f14c45f528c' 'b57e7f7720307a02d5a6598b00fe3afa' 
-         '163d841abdc5d65e05a506ea68087e13' '3cfd590a7f85f3ed8d55c43451ea58ba' 
-         'SKIP')
+         '163d841abdc5d65e05a506ea68087e13' 'SKIP' 'SKIP')
 
 build() {
   make PREFIX=/usr DESTDIR="$pkgdir"
