@@ -1,3 +1,5 @@
+#define SCRIPTS_DIR "~/.scripts/xdf/surf/"
+
 /* modifier 0 means no modifier */
 static int surfuseragent    = 1;  /* Append Surf version to default WebKit user agent */
 static char *fulluseragent  = ""; /* Or override the whole user agent string */
@@ -7,6 +9,7 @@ static char *cachedir       = "~/.surf/cache/";
 static char *cookiefile     = "~/.surf/cookies.txt";
 static char *historyfile    = "~/.surf/history.txt";
 static char *wmclass        = "Surf";
+static char *externalpipe_sigusr1[] = {"/bin/sh", "-c", SCRIPTS_DIR "externalpipe_buffer.sh surf_strings_read"};
 
 /* Webkit default features */
 static Parameter defconfig[ParameterLast] = {
@@ -46,8 +49,6 @@ static UriParameters uriparams[] = {
 
 static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
                                     WEBKIT_FIND_OPTIONS_WRAP_AROUND;
-
-#define SCRIPTS_DIR "~/.scripts/xdf/surf/"
 
 #define SETPROP(p, q) { \
         .v = (const char *[]){ "/bin/sh", "-c", \

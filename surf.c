@@ -146,6 +146,7 @@ static void die(const char *errstr, ...);
 static void setup(void);
 static void sigchld(int unused);
 static void sighup(int unused);
+static void sigusr1(int unused);
 static char *buildfile(const char *path);
 static char *buildpath(const char *path);
 static const char *getuserhomedir(const char *user);
@@ -414,6 +415,15 @@ sigchld(int unused)
 		die("Can't install SIGCHLD handler");
 	while (waitpid(-1, NULL, WNOHANG) > 0)
 		;
+}
+
+void
+sigusr1(int unused)
+{
+  static Arg a = {.v = externalpipe_sigusr1};
+	Client *c;
+	for (c = clients; c; c = c->next)
+		externalpipe(c, &a);
 }
 
 void
@@ -1870,6 +1880,12 @@ main(int argc, char *argv[])
 	setup();
 	c = newclient(NULL);
 	showview(NULL, c);
+
+	struct sigaction sa;
+	sa.sa_handler = sigusr1;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGUSR1, &sa, NULL);
 
 	loaduri(c, &arg);
 	updatetitle(c);
