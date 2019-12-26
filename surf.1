@@ -126,13 +126,13 @@ Specify the
 which surf should use.
 .BR xprop(1).
 .SH USAGE
-.B Escape
+.B Escape and Ctrl\-c
 Stops loading current page or stops download.
 .TP
-.B Ctrl\-h
+.B Ctrl\-o
 Walks back the history.
 .TP
-.B Ctrl\-l
+.B Ctrl\-i
 Walks forward the history.
 .TP
 .B Ctrl\-k
@@ -144,13 +144,13 @@ Scrolls page downwards.
 .B Ctrl\-b
 Scroll up one whole page view.
 .TP
-.B Ctrl\-Space
+.B Ctrl\-f
 Scroll down one whole page view.
 .TP
-.B Ctrl\-i
+.B Ctrl\-l
 Scroll horizontally to the right.
 .TP
-.B Ctrl\-u
+.B Ctrl\-h
 Scroll horizontally to the left.
 .TP
 .B Ctrl\-Shift\-k or Ctrl\-+
@@ -162,7 +162,7 @@ Zooms page out
 .B Ctrl\-Shift\-q
 Resets Zoom
 .TP
-.B Ctrl\-f and Ctrl\-/
+.B Ctrl\-/
 Opens the search-bar.
 .TP
 .B Ctrl\-n
@@ -171,8 +171,20 @@ Go to next search result.
 .B Ctrl\-Shift\-n
 Go to previous search result.
 .TP
-.B Ctrl\-g
+.B Ctrl\-d and Ctrl\-Shift\-d
+Select link from current page and open in the current/new window.
+.TP
+.B Ctrl\-Enter
 Opens the URL-bar (requires dmenu installed).
+.TP
+.B Ctrl\-g
+Choose bookmark (requires dmenu installed).
+.TP
+.B Ctrl\-t
+Go back in history (requires dmenu installed).
+.TP
+.B Ctrl\-w
+Play in external program (requires mpv installed).
 .TP
 .B Ctrl\-p
 Loads URI from primary selection.
@@ -189,7 +201,7 @@ Reloads the website without using the cache.
 .B Ctrl\-y
 Copies current URI to primary selection.
 .TP
-.B Ctrl\-o
+.B Ctrl\-u
 Show the sourcecode of the current page.
 .TP
 .B Ctrl\-Shift\-a
@@ -211,7 +223,7 @@ Toggle if the
 .I stylefile 
 file should be loaded. This will reload the page.
 .TP
-.B Ctrl\-Shift\-o
+.B Ctrl\-Shift\-u
 Open the Web Inspector (Developer Tools) window for the current page.
 .TP
 .B Ctrl\-Shift\-s
