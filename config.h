@@ -6,6 +6,7 @@ static char *styledir       = "~/.surf/styles/";
 static char *cachedir       = "~/.surf/cache/";
 static char *cookiefile     = "~/.surf/cookies.txt";
 static char *historyfile    = "~/.surf/history.txt";
+static char *wmclass        = "Surf";
 
 /* Webkit default features */
 static Parameter defconfig[ParameterLast] = {

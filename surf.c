@@ -323,7 +323,7 @@ usage(void)
 {
 	die("usage: %s [-bBdDfFgGiIkKmMnNpPsSvx] [-a cookiepolicies ] "
 	    "[-c cookiefile] [-e xid] [-r scriptfile] [-t stylefile] "
-	    "[-u useragent] [-z zoomlevel] [uri]\n", basename(argv0));
+	    "[-u useragent] [-w wmclass] [-z zoomlevel] [uri]\n", basename(argv0));
 }
 
 void
@@ -1288,7 +1288,7 @@ createwindow(Client *c)
 		w = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
 		wmstr = g_path_get_basename(argv0);
-		gtk_window_set_wmclass(GTK_WINDOW(w), wmstr, "Surf");
+		gtk_window_set_wmclass(GTK_WINDOW(w), wmstr, wmclass);
 		g_free(wmstr);
 
 		wmstr = g_strdup_printf("%s[%lu]", "Surf",
@@ -1846,6 +1846,9 @@ main(int argc, char *argv[])
 	case 'v':
 		die("surf-"VERSION", ©2009-2015 surf engineers, "
 		    "see LICENSE for details\n");
+    case 'w':
+		wmclass = EARGF(usage());
+        break;
 	case 'x':
 		showxid = 1;
 		break;
