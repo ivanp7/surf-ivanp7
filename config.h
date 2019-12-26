@@ -10,6 +10,7 @@ static char *cookiefile     = "~/.surf/cookies.txt";
 static char *historyfile    = "~/.surf/history.txt";
 static char *wmclass        = "Surf";
 static char *externalpipe_sigusr1[] = {"/bin/sh", "-c", SCRIPTS_DIR "externalpipe_buffer.sh surf_strings_read"};
+static int scroll_multiplier = 4;
 
 /* Webkit default features */
 static Parameter defconfig[ParameterLast] = {

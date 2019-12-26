@@ -181,6 +181,8 @@ static void initwebextensions(WebKitWebContext *wc, Client *c);
 static GtkWidget *createview(WebKitWebView *v, WebKitNavigationAction *a,
                              Client *c);
 static gboolean buttonreleased(GtkWidget *w, GdkEvent *e, Client *c);
+static gboolean scrollmultiply(GtkWidget *w, GdkEvent *e, Client *c);
+
 static GdkFilterReturn processx(GdkXEvent *xevent, GdkEvent *event,
                                 gpointer d);
 static gboolean winevent(GtkWidget *w, GdkEvent *e, Client *c);
@@ -1106,6 +1108,8 @@ newview(Client *c, WebKitWebView *rv)
 			 G_CALLBACK(titlechanged), c);
 	g_signal_connect(G_OBJECT(v), "button-release-event",
 			 G_CALLBACK(buttonreleased), c);
+	g_signal_connect(G_OBJECT(v), "scroll-event",
+			 G_CALLBACK(scrollmultiply), c);
 	g_signal_connect(G_OBJECT(v), "close",
 			G_CALLBACK(closeview), c);
 	g_signal_connect(G_OBJECT(v), "create",
@@ -1176,6 +1180,13 @@ buttonreleased(GtkWidget *w, GdkEvent *e, Client *c)
 		}
 	}
 
+	return FALSE;
+}
+
+gboolean
+scrollmultiply(GtkWidget *w, GdkEvent *e, Client *c)
+{
+	e->scroll.delta_y*=scroll_multiplier;
 	return FALSE;
 }
 
@@ -1625,35 +1636,58 @@ zoom(Client *c, const Arg *a)
 void
 scroll(Client *c, const Arg *a)
 {
-	GdkEvent *ev = gdk_event_new(GDK_KEY_PRESS);
-
-	gdk_event_set_device(ev, gdkkb);
-	ev->key.window = gtk_widget_get_window(GTK_WIDGET(c->win));
-	ev->key.state = GDK_CONTROL_MASK;
-	ev->key.time = GDK_CURRENT_TIME;
+    int times = 1;
 
 	switch (a->i) {
 	case 'd':
-		ev->key.keyval = GDK_KEY_Down;
-		break;
-	case 'D':
-		ev->key.keyval = GDK_KEY_Page_Down;
+        times = scroll_multiplier;
 		break;
 	case 'l':
-		ev->key.keyval = GDK_KEY_Left;
+        times = scroll_multiplier;
 		break;
 	case 'r':
-		ev->key.keyval = GDK_KEY_Right;
-		break;
-	case 'U':
-		ev->key.keyval = GDK_KEY_Page_Up;
+        times = scroll_multiplier;
 		break;
 	case 'u':
-		ev->key.keyval = GDK_KEY_Up;
+        times = scroll_multiplier;
 		break;
 	}
 
-	gdk_event_put(ev);
+    GdkEvent *ev;
+    for (int i = 0; i < times; i++)
+    {
+        ev = gdk_event_new(GDK_KEY_PRESS);
+
+        gdk_event_set_device(ev, gdkkb);
+        ev->key.window = gtk_widget_get_window(GTK_WIDGET(c->win));
+        ev->key.state = GDK_CONTROL_MASK;
+        ev->key.time = GDK_CURRENT_TIME;
+
+        int times = 1;
+
+        switch (a->i) {
+            case 'd':
+                ev->key.keyval = GDK_KEY_Down;
+                break;
+            case 'D':
+                ev->key.keyval = GDK_KEY_Page_Down;
+                break;
+            case 'l':
+                ev->key.keyval = GDK_KEY_Left;
+                break;
+            case 'r':
+                ev->key.keyval = GDK_KEY_Right;
+                break;
+            case 'U':
+                ev->key.keyval = GDK_KEY_Page_Up;
+                break;
+            case 'u':
+                ev->key.keyval = GDK_KEY_Up;
+                break;
+        }
+
+        gdk_event_put(ev);
+    }
 }
 
 void
