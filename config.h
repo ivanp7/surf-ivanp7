@@ -140,7 +140,7 @@ static char *editscreen[] = { "/bin/sh", "-c", SCRIPTS_DIR "edit_screen.sh", NUL
 static Key keys[] = {
     /* modifier              keyval          function    arg */
     { MODKEY,                GDK_KEY_Return, spawn,      SETPROP("_SURF_URI", "_SURF_GO") },
-    { MODKEY,                GDK_KEY_t,      spawn,      SETURI("_SURF_GO") },
+    { MODKEY,                GDK_KEY_s,      spawn,      SETURI("_SURF_GO") },
     { MODKEY,                GDK_KEY_g,      spawn,      SETURI_BM("_SURF_GO") },
     { MODKEY,                GDK_KEY_m,      spawn,      BM_ADD("_SURF_URI") },
 
