@@ -624,11 +624,121 @@ getatom(Client *c, int a)
 }
 
 void
+transliterate_russian(unsigned char u1, unsigned char u2, char *r1, char *r2)
+{
+    if (u1 == 0xd0)
+    {
+        if (u2 == 0x81) // JO
+        { *r1 = 'J'; *r2 = 'O'; return; }
+        else if (u2 == 0x86) // belarusian I
+        { *r1 = 'I'; *r2 = '\0'; return; }
+        else if (u2 == 0x8e) // belarusian short U
+        { *r1 = 'U'; *r2 = '\0'; return; }
+    }
+    else if (u1 == 0xd1)
+    {
+        if (u2 == 0x91) // jo
+        { *r1 = 'j'; *r2 = 'o'; return; }
+        else if (u2 == 0x96) // belarusian i
+        { *r1 = 'i'; *r2 = '\0'; return; }
+        else if (u2 == 0x9e) // belarusian short u
+        { *r1 = 'u'; *r2 = '\0'; return; }
+    }
+
+    const char *uppercase = "ABVGDEZZIJKLMNOPRSTUFHTCSS\"Y'EJJ";
+    const char *lowercase1 = "abvgdezzijklmnop";
+    const char *lowercase2 = "rstufhtcss\"y'ejj";
+
+    *r2 = '\0';
+    if ((u1 == 0xd0) && (u2 >= 0x90) && (u2 <= 0xaf)) // upper case
+    {
+        *r1 = uppercase[u2 - 0x90];
+        switch (u2)
+        {
+            case 0x96: *r2 = 'H'; break; // ZH
+            case 0xa6: *r2 = 'S'; break; // TS
+            case 0xa7: *r2 = 'H'; break; // CH
+            case 0xa8: *r2 = 'H'; break; // SH
+            case 0xa9: *r2 = 'H'; break; // SH (SHCH)
+            case 0xae: *r2 = 'U'; break; // JU
+            case 0xaf: *r2 = 'A'; break; // JA
+        }
+    }
+    else if ((u1 == 0xd0) && (u2 >= 0xb0) && (u2 <= 0xbf)) // lower case, part 1
+    {
+        *r1 = lowercase1[u2 - 0xb0];
+        if (u2 == 0xb6) // zh
+            *r2 = 'h';
+    }
+    else if ((u1 == 0xd1) && (u2 >= 0x80) && (u2 <= 0x8f)) // lower case, part 2
+    {
+        *r1 = lowercase2[u2 - 0x80];
+        switch (u2)
+        {
+            case 0x86: *r2 = 's'; break; // ts
+            case 0x87: *r2 = 'h'; break; // ch
+            case 0x88: *r2 = 'h'; break; // sh
+            case 0x89: *r2 = 'h'; break; // sh (shch)
+            case 0x8e: *r2 = 'u'; break; // ju
+            case 0x8f: *r2 = 'a'; break; // ja
+        }
+    }
+    else
+    {
+        *r1 = '?';
+        *r2 = '?';
+    }
+}
+
+void
 updatetitle(Client *c)
 {
 	char *title;
 	const char *name = c->overtitle ? c->overtitle :
 	                   c->title ? c->title : "";
+    const char *i = name;
+
+    const char unknown = '?';
+    char *safe_name, *safe_i;
+    safe_i = safe_name = g_strdup(name);
+    int extra_spaces = 0;
+    while (*i != '\0')
+    {
+        if (((unsigned char)*i == 0xd0) || ((unsigned char)*i == 0xd1))
+        { // workaround transliteration for russian characters
+            i++;
+            if (*i == '\0')
+            {
+                *safe_i = unknown;
+                safe_i++;
+                break;
+            }
+
+            char r1, r2;
+            transliterate_russian((unsigned char)*(i-1), (unsigned char)*i, &r1, &r2);
+            *safe_i = r1;
+            if (r2 != '\0')
+            {
+                safe_i++;
+                *safe_i = r2;
+            }
+            else
+                extra_spaces++;
+        }
+        else if ((*i < 32) || (*i > 126)) // non-standard or invisible ASCII characters
+            *safe_i = unknown;
+        else
+            *safe_i = *i;
+
+        i++;
+        safe_i++;
+    }
+    while (extra_spaces > 0)
+    {
+        *safe_i = ' ';
+        safe_i++;
+        extra_spaces--;
+    }
 
 	if (curconfig[ShowIndicators].val.b) {
 		gettogglestats(c);
@@ -636,16 +746,18 @@ updatetitle(Client *c)
 
 		if (c->progress != 100)
 			title = g_strdup_printf("[%i%%] %s:%s | %s",
-			        c->progress, togglestats, pagestats, name);
+			        c->progress, togglestats, pagestats, safe_name);
 		else
 			title = g_strdup_printf("%s:%s | %s",
-			        togglestats, pagestats, name);
+			        togglestats, pagestats, safe_name);
 
 		gtk_window_set_title(GTK_WINDOW(c->win), title);
 		g_free(title);
 	} else {
-		gtk_window_set_title(GTK_WINDOW(c->win), name);
+		gtk_window_set_title(GTK_WINDOW(c->win), safe_name);
 	}
+
+    g_free(safe_name);
 }
 
 void
