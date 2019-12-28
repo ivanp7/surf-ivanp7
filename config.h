@@ -1,5 +1,3 @@
-#define SCRIPTS_DIR "~/.scripts/xdf/surf/"
-
 /* modifier 0 means no modifier */
 static int surfuseragent    = 1;  /* Append Surf version to default WebKit user agent */
 static char *fulluseragent  = ""; /* Or override the whole user agent string */
@@ -9,8 +7,7 @@ static char *cachedir       = "~/.surf/cache/";
 static char *cookiefile     = "~/.surf/cookies.txt";
 static char *historyfile    = "~/.surf/history.txt";
 static char *wmclass        = "Surf";
-static char *externalpipe_sigusr1[] = {"/bin/sh", "-c", SCRIPTS_DIR "externalpipe_buffer.sh surf_strings_read"};
-static int scroll_multiplier = 4;
+static int scroll_multiplier = 5;
 
 /* Webkit default features */
 static Parameter defconfig[ParameterLast] = {
@@ -51,11 +48,21 @@ static UriParameters uriparams[] = {
 static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
                                     WEBKIT_FIND_OPTIONS_WRAP_AROUND;
 
+/* styles */
+/*
+ * The iteration will stop at the first match, beginning at the beginning of
+ * the list.
+ */
+static SiteStyle styles[] = {
+    /* regexp               file in $styledir */
+    { ".*",                 "default.css" },
+};
+
 #define SETPROP(p, q) { \
         .v = (const char *[]){ "/bin/sh", "-c", \
              "prop=\"`xprop -id $2 $0 " \
              "| sed \"s/^$0(STRING) = \\(\\\\\"\\?\\)\\(.*\\)\\1$/\\2/\" " \
-             "| xargs -0 printf %b | dmenu.sh`\" &&" \
+             "| xargs -0 printf %b | dmenu.sh -w $2`\" &&" \
              "xprop -id $2 -f $1 8s -set $1 \"$prop\"", \
              p, q, winid, NULL \
         } \
@@ -88,16 +95,6 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
         } \
 }
 
-#define SETURI(p)       { .v = (char *[]){ "/bin/sh", "-c", \
-"prop=\"`" SCRIPTS_DIR "surf_history_dmenu.sh`\" &&" \
-"xprop -id $1 -f $0 8s -set $0 \"$prop\"", \
-p, winid, NULL } }
-
-#define SETURI_BM(p)       { .v = (char *[]){ "/bin/sh", "-c", \
-"prop=\"`" SCRIPTS_DIR "surf_bookmarks_dmenu.sh`\" &&" \
-"xprop -id $1 -f $0 8s -set $0 \"$prop\"", \
-p, winid, NULL } }
-
 /* BM_ADD(readprop) */
 #define BM_ADD(r) {\
         .v = (const char *[]){ "/bin/sh", "-c", \
@@ -109,18 +106,18 @@ p, winid, NULL } }
         } \
 }
 
-/* styles */
-/*
- * The iteration will stop at the first match, beginning at the beginning of
- * the list.
- */
-static SiteStyle styles[] = {
-    /* regexp               file in $styledir */
-    { ".*",                 "default.css" },
+#define SCRIPTS_DIR "~/.scripts/xdf/surf/"
+
+/* bookmarks */
+static char *bookmarkselect_curwin [] = { "/bin/sh", "-c",
+    SCRIPTS_DIR "surf_bookmarks_dmenu.sh $0 'Bookmark' | xargs -r xprop -id $0 -f _SURF_GO 8s -set _SURF_GO",
+    winid, NULL
 };
-
-#define MODKEY GDK_CONTROL_MASK
-
+/* history */
+static char *historyselect_curwin [] = { "/bin/sh", "-c",
+    SCRIPTS_DIR "surf_history_dmenu.sh $0 'History link' | xargs -r xprop -id $0 -f _SURF_GO 8s -set _SURF_GO",
+    winid, NULL
+};
 /* external pipe */
 static char *linkselect_curwin [] = { "/bin/sh", "-c",
     SCRIPTS_DIR "surf_linkselect.sh $0 'Link' | xargs -r xprop -id $0 -f _SURF_GO 8s -set _SURF_GO",
@@ -131,8 +128,12 @@ static char *linkselect_newwin [] = { "/bin/sh", "-c",
     winid, NULL
 };
 static char *editscreen[] = { "/bin/sh", "-c", SCRIPTS_DIR "edit_screen.sh", NULL };
+static char *externalpipe_sigusr1[] = {"/bin/sh", "-c", SCRIPTS_DIR "externalpipe_buffer.sh surf_strings_read"};
 
 /* hotkeys */
+
+#define MODKEY GDK_CONTROL_MASK
+
 /*
  * If you use anything else but MODKEY and GDK_SHIFT_MASK, don't forget to
  * edit the CLEANMASK() macro.
@@ -140,8 +141,8 @@ static char *editscreen[] = { "/bin/sh", "-c", SCRIPTS_DIR "edit_screen.sh", NUL
 static Key keys[] = {
     /* modifier              keyval          function    arg */
     { MODKEY,                GDK_KEY_Return, spawn,      SETPROP("_SURF_URI", "_SURF_GO") },
-    { MODKEY,                GDK_KEY_s,      spawn,      SETURI("_SURF_GO") },
-    { MODKEY,                GDK_KEY_g,      spawn,      SETURI_BM("_SURF_GO") },
+    { MODKEY,                GDK_KEY_s,      spawn,      { .v = historyselect_curwin } },
+    { MODKEY,                GDK_KEY_g,      spawn,      { .v = bookmarkselect_curwin } },
     { MODKEY,                GDK_KEY_m,      spawn,      BM_ADD("_SURF_URI") },
 
     { MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
