@@ -211,5 +211,3 @@ static Button buttons[] = {
 
 static char *searchengine = "https://duckduckgo.com/?q=";
 
-#define HOMEPAGE "https://duckduckgo.com/"
-
