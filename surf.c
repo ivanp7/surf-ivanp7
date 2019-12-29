@@ -683,11 +683,8 @@ transliterate_russian(unsigned char u1, unsigned char u2, char *r1, char *r2)
             case 0x8f: *r2 = 'a'; break; // ja
         }
     }
-    else
-    {
-        *r1 = '?';
-        *r2 = '?';
-    }
+    else // unknown character
+        *r1 = *r2 = '\0';
 }
 
 void
@@ -716,14 +713,23 @@ updatetitle(Client *c)
 
             char r1, r2;
             transliterate_russian((unsigned char)*(i-1), (unsigned char)*i, &r1, &r2);
-            *safe_i = r1;
-            if (r2 != '\0')
+            if (r1 != '\0')
             {
-                safe_i++;
-                *safe_i = r2;
+                *safe_i = r1;
+                if (r2 != '\0')
+                {
+                    safe_i++;
+                    *safe_i = r2;
+                }
+                else
+                    extra_spaces++;
             }
             else
-                extra_spaces++;
+            {
+                *safe_i = unknown;
+                safe_i++;
+                *safe_i = unknown;
+            }
         }
         else if ((*i < 32) || (*i > 126)) // non-standard or invisible ASCII characters
             *safe_i = unknown;
