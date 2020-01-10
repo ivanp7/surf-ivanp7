@@ -62,7 +62,7 @@ static SiteStyle styles[] = {
         .v = (const char *[]){ "/bin/sh", "-c", \
              "prop=\"`xprop -id $2 $0 " \
              "| sed \"s/^$0(STRING) = \\(\\\\\"\\?\\)\\(.*\\)\\1$/\\2/\" " \
-             "| xargs -0 printf %b | dmenu.sh -w $2`\" &&" \
+             "| xargs -0 printf %b | dmenu -fn \"$DEFAULT_FONT\" -w $2`\" &&" \
              "xprop -id $2 -f $1 8s -set $1 \"$prop\"", \
              p, q, winid, NULL \
         } \
