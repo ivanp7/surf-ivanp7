@@ -95,13 +95,17 @@ static SiteStyle styles[] = {
         } \
 }
 
+#define BOOKMARKS_DIR "~/.bookmarks/"
+#define BOOKMARKS_FILE BOOKMARKS_DIR "uncategorized.txt"
+
 /* BM_ADD(readprop) */
 #define BM_ADD(r) {\
         .v = (const char *[]){ "/bin/sh", "-c", \
              "(echo $(xprop -id $0 $1) | cut -d '\"' -f2 " \
-             "| sed 's/.*https*:\\/\\/\\(www\\.\\)\\?//' && cat ~/.surf/bookmarks.txt) " \
-             "| awk '!seen[$0]++' > ~/.surf/bookmarks.txt.tmp && " \
-             "mv ~/.surf/bookmarks.txt.tmp ~/.surf/bookmarks.txt", \
+             "| sed 's/.*https*:\\/\\/\\(www\\.\\)\\?//' && " \
+             "mkdir -p " BOOKMARKS_DIR "&& cat " BOOKMARKS_FILE ") " \
+             "| awk '!seen[$0]++' > " BOOKMARKS_FILE ".tmp && " \
+             "mv " BOOKMARKS_FILE ".tmp " BOOKMARKS_FILE, \
              winid, r, NULL \
         } \
 }
