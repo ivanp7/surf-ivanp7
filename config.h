@@ -99,8 +99,10 @@ static SiteStyle styles[] = {
 
 /* bookmarks */
 static char *bookmarkadd_curwin [] = { "/bin/sh", "-c",
-    SCRIPTS_DIR "surf_add_bookmark.sh $(xprop -id $0 _SURF_URI | cut -d '\"' -f2 | \
-        sed -E 's@.*https?://(www\\.)?@@') $0",
+    SCRIPTS_DIR "surf_add_bookmark.sh \
+        \"$(xprop -id $0 _SURF_URI | cut -d '\"' -f2 | \
+                sed -E 's@.*https?://(www\\.)?@@')        $(xprop -id $0 WM_NAME | \
+                cut -d '\"' -f2 | sed 's/[^|]*| *//')\" $0",
     winid, NULL
 };
 static char *bookmarkselect_curwin [] = { "/bin/sh", "-c",
