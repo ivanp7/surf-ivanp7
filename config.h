@@ -95,31 +95,21 @@ static SiteStyle styles[] = {
         } \
 }
 
-#define BOOKMARKS_DIR "~/.bookmarks/"
-#define BOOKMARKS_FILE BOOKMARKS_DIR "uncategorized.txt"
-
-/* BM_ADD(readprop) */
-#define BM_ADD(r) {\
-        .v = (const char *[]){ "/bin/sh", "-c", \
-             "(echo $(xprop -id $0 $1) | cut -d '\"' -f2 " \
-             "| sed 's/.*https*:\\/\\/\\(www\\.\\)\\?//' && " \
-             "mkdir -p " BOOKMARKS_DIR "&& cat " BOOKMARKS_FILE ") " \
-             "| awk '!seen[$0]++' > " BOOKMARKS_FILE ".tmp && " \
-             "mv " BOOKMARKS_FILE ".tmp " BOOKMARKS_FILE, \
-             winid, r, NULL \
-        } \
-}
-
 #define SCRIPTS_DIR "~/.scripts/xdf/surf/"
 
 /* bookmarks */
+static char *bookmarkadd_curwin [] = { "/bin/sh", "-c",
+    SCRIPTS_DIR "surf_add_bookmark.sh $(xprop -id $0 _SURF_URI | cut -d '\"' -f2 | \
+        sed -E 's@.*https?://(www\\.)?@@') $0",
+    winid, NULL
+};
 static char *bookmarkselect_curwin [] = { "/bin/sh", "-c",
-    SCRIPTS_DIR "surf_bookmarks_dmenu.sh $0 'Bookmark' | xargs -r xprop -id $0 -f _SURF_GO 8s -set _SURF_GO",
+    SCRIPTS_DIR "surf_bookmarks_dmenu.sh $0 | xargs -r xprop -id $0 -f _SURF_GO 8s -set _SURF_GO",
     winid, NULL
 };
 /* history */
 static char *historyselect_curwin [] = { "/bin/sh", "-c",
-    SCRIPTS_DIR "surf_history_dmenu.sh $0 'History link' | xargs -r xprop -id $0 -f _SURF_GO 8s -set _SURF_GO",
+    SCRIPTS_DIR "surf_history_dmenu.sh $0 | xargs -r xprop -id $0 -f _SURF_GO 8s -set _SURF_GO",
     winid, NULL
 };
 /* external pipe */
@@ -147,7 +137,7 @@ static Key keys[] = {
     { MODKEY,                GDK_KEY_Return, spawn,      SETPROP("_SURF_URI", "_SURF_GO") },
     { MODKEY,                GDK_KEY_s,      spawn,      { .v = historyselect_curwin } },
     { MODKEY,                GDK_KEY_g,      spawn,      { .v = bookmarkselect_curwin } },
-    { MODKEY,                GDK_KEY_m,      spawn,      BM_ADD("_SURF_URI") },
+    { MODKEY,                GDK_KEY_m,      spawn,      { .v = bookmarkadd_curwin } },
 
     { MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
 
