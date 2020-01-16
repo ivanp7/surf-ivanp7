@@ -141,6 +141,10 @@ static Key keys[] = {
     { MODKEY,                GDK_KEY_g,      spawn,      { .v = bookmarkselect_curwin } },
     { MODKEY,                GDK_KEY_m,      spawn,      { .v = bookmarkadd_curwin } },
 
+    { MODKEY,                GDK_KEY_d,     externalpipe, { .v = linkselect_curwin } },
+    { GDK_SHIFT_MASK|MODKEY, GDK_KEY_d,     externalpipe, { .v = linkselect_newwin } },
+    { MODKEY,                GDK_KEY_u,     externalpipe, { .v = editscreen        } },
+
     { MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
 
     { 0,                     GDK_KEY_Escape, stop,       { 0 } },
@@ -187,10 +191,6 @@ static Key keys[] = {
     { MODKEY|GDK_SHIFT_MASK, GDK_KEY_v,      toggle,     { .i = Plugins } },
     { MODKEY|GDK_SHIFT_MASK, GDK_KEY_b,      toggle,     { .i = ScrollBars } },
     { MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,     { .i = Style } },
-
-    { MODKEY,                GDK_KEY_d, externalpipe, { .v = linkselect_curwin } },
-    { GDK_SHIFT_MASK|MODKEY, GDK_KEY_d, externalpipe, { .v = linkselect_newwin } },
-    { MODKEY,                GDK_KEY_u, externalpipe, { .v = editscreen        } },
 };
 
 /* button definitions */
