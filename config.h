@@ -120,7 +120,7 @@ static char *linkselect_curwin [] = { "/bin/sh", "-c",
     winid, NULL
 };
 static char *linkselect_newwin [] = { "/bin/sh", "-c",
-    SCRIPTS_DIR "surf_linkselect.sh $0 'Link (new window)' | xargs -r surf",
+    SCRIPTS_DIR "surf_linkselect.sh $0 'Link (new window)' | " SCRIPTS_DIR "surf_new_window.sh $(xdotool getactivewindow)",
     winid, NULL
 };
 static char *editscreen[] = { "/bin/sh", "-c", SCRIPTS_DIR "edit_screen.sh", NULL };
