@@ -136,61 +136,61 @@ static char *externalpipe_sigusr1[] = {"/bin/sh", "-c", SCRIPTS_DIR "externalpip
  */
 static Key keys[] = {
     /* modifier              keyval          function    arg */
-    { MODKEY,                GDK_KEY_Return, spawn,      SETPROP("_SURF_URI", "_SURF_GO") },
-    { MODKEY,                GDK_KEY_s,      spawn,      { .v = historyselect_curwin } },
-    { MODKEY,                GDK_KEY_g,      spawn,      { .v = bookmarkselect_curwin } },
-    { MODKEY,                GDK_KEY_m,      spawn,      { .v = bookmarkadd_curwin } },
+    { MODKEY,                36 /*GDK_KEY_Return*/, spawn,      SETPROP("_SURF_URI", "_SURF_GO") },
+    { MODKEY,                39 /*GDK_KEY_s*/,      spawn,      { .v = historyselect_curwin } },
+    { MODKEY,                42 /*GDK_KEY_g*/,      spawn,      { .v = bookmarkselect_curwin } },
+    { MODKEY,                58 /*GDK_KEY_m*/,      spawn,      { .v = bookmarkadd_curwin } },
 
-    { MODKEY,                GDK_KEY_d,     externalpipe, { .v = linkselect_curwin } },
-    { GDK_SHIFT_MASK|MODKEY, GDK_KEY_d,     externalpipe, { .v = linkselect_newwin } },
-    { MODKEY,                GDK_KEY_u,     externalpipe, { .v = editscreen        } },
+    { MODKEY,                40 /*GDK_KEY_d*/,     externalpipe, { .v = linkselect_curwin } },
+    { GDK_SHIFT_MASK|MODKEY, 40 /*GDK_KEY_d*/,     externalpipe, { .v = linkselect_newwin } },
+    { MODKEY,                30 /*GDK_KEY_u*/,     externalpipe, { .v = editscreen        } },
 
-    { MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
+    { MODKEY,                25 /*GDK_KEY_w*/,      playexternal, { 0 } },
 
-    { 0,                     GDK_KEY_Escape, stop,       { 0 } },
-    { MODKEY,                GDK_KEY_c,      stop,       { 0 } },
+    { 0,                     9 /*GDK_KEY_Escape*/, stop,       { 0 } },
+    { MODKEY,                54 /*GDK_KEY_c*/,      stop,       { 0 } },
 
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_r,      reload,     { .b = 1 } },
-    { MODKEY,                GDK_KEY_r,      reload,     { .b = 0 } },
+    { MODKEY|GDK_SHIFT_MASK, 27 /*GDK_KEY_r*/,      reload,     { .b = 1 } },
+    { MODKEY,                27 /*GDK_KEY_r*/,      reload,     { .b = 0 } },
 
-    { MODKEY,                GDK_KEY_i,      navigate,   { .i = +1 } },
-    { MODKEY,                GDK_KEY_o,      navigate,   { .i = -1 } },
+    { MODKEY,                31 /*GDK_KEY_i*/,      navigate,   { .i = +1 } },
+    { MODKEY,                32 /*GDK_KEY_o*/,      navigate,   { .i = -1 } },
 
     /* Currently we have to use scrolling steps that WebKit2GTK+ gives us
      * d: step down, u: step up, r: step right, l:step left
      * D: page down, U: page up */
-    { MODKEY,                GDK_KEY_h,      scroll,     { .i = 'l' } },
-    { MODKEY,                GDK_KEY_j,      scroll,     { .i = 'd' } },
-    { MODKEY,                GDK_KEY_k,      scroll,     { .i = 'u' } },
-    { MODKEY,                GDK_KEY_l,      scroll,     { .i = 'r' } },
-    { MODKEY,                GDK_KEY_f,      scroll,     { .i = 'D' } },
-    { MODKEY,                GDK_KEY_b,      scroll,     { .i = 'U' } },
+    { MODKEY,                43 /*GDK_KEY_h*/,      scroll,     { .i = 'l' } },
+    { MODKEY,                44 /*GDK_KEY_j*/,      scroll,     { .i = 'd' } },
+    { MODKEY,                45 /*GDK_KEY_k*/,      scroll,     { .i = 'u' } },
+    { MODKEY,                46 /*GDK_KEY_l*/,      scroll,     { .i = 'r' } },
+    { MODKEY,                41 /*GDK_KEY_f*/,      scroll,     { .i = 'D' } },
+    { MODKEY,                56 /*GDK_KEY_b*/,      scroll,     { .i = 'U' } },
 
-    { MODKEY,                GDK_KEY_minus,  zoom,       { .i = -1 } },
-    { MODKEY,                GDK_KEY_backslash,  zoom,       { .i = 0  } },
-    { MODKEY,                GDK_KEY_equal,  zoom,       { .i = +1 } },
+    { MODKEY,                20 /*GDK_KEY_minus*/,  zoom,       { .i = -1 } },
+    { MODKEY,                51 /*GDK_KEY_backslash*/,  zoom,       { .i = 0  } },
+    { MODKEY,                21 /*GDK_KEY_equal*/,  zoom,       { .i = +1 } },
 
-    { MODKEY,                GDK_KEY_p,      clipboard,  { .b = 1 } },
-    { MODKEY,                GDK_KEY_y,      clipboard,  { .b = 0 } },
+    { MODKEY,                33 /*GDK_KEY_p*/,      clipboard,  { .b = 1 } },
+    { MODKEY,                29 /*GDK_KEY_y*/,      clipboard,  { .b = 0 } },
 
-    { MODKEY,                GDK_KEY_slash,  spawn,      SETPROP("_SURF_FIND", "_SURF_FIND") },
-    { MODKEY,                GDK_KEY_n,      find,       { .i = +1 } },
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_n,      find,       { .i = -1 } },
+    { MODKEY,                61 /*GDK_KEY_slash*/,  spawn,      SETPROP("_SURF_FIND", "_SURF_FIND") },
+    { MODKEY,                57 /*GDK_KEY_n*/,      find,       { .i = +1 } },
+    { MODKEY|GDK_SHIFT_MASK, 57 /*GDK_KEY_n*/,      find,       { .i = -1 } },
 
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_p,      print,      { 0 } },
+    { MODKEY|GDK_SHIFT_MASK, 33 /*GDK_KEY_p*/,      print,      { 0 } },
 
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_a,      togglecookiepolicy, { 0 } },
-    { 0,                     GDK_KEY_F11,    togglefullscreen, { 0 } },
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_u,      toggleinspector, { 0 } },
+    { MODKEY|GDK_SHIFT_MASK, 38 /*GDK_KEY_a*/,      togglecookiepolicy, { 0 } },
+    { 0,                     95 /*GDK_KEY_F11*/,    togglefullscreen, { 0 } },
+    { MODKEY|GDK_SHIFT_MASK, 30 /*GDK_KEY_u*/,      toggleinspector, { 0 } },
 
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_c,      toggle,     { .i = CaretBrowsing } },
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_f,      toggle,     { .i = FrameFlattening } },
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_g,      toggle,     { .i = Geolocation } },
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_s,      toggle,     { .i = JavaScript } },
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_i,      toggle,     { .i = LoadImages } },
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_v,      toggle,     { .i = Plugins } },
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_b,      toggle,     { .i = ScrollBars } },
-    { MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,     { .i = Style } },
+    { MODKEY|GDK_SHIFT_MASK, 54 /*GDK_KEY_c*/,      toggle,     { .i = CaretBrowsing } },
+    { MODKEY|GDK_SHIFT_MASK, 41 /*GDK_KEY_f*/,      toggle,     { .i = FrameFlattening } },
+    { MODKEY|GDK_SHIFT_MASK, 42 /*GDK_KEY_g*/,      toggle,     { .i = Geolocation } },
+    { MODKEY|GDK_SHIFT_MASK, 39 /*GDK_KEY_s*/,      toggle,     { .i = JavaScript } },
+    { MODKEY|GDK_SHIFT_MASK, 31 /*GDK_KEY_i*/,      toggle,     { .i = LoadImages } },
+    { MODKEY|GDK_SHIFT_MASK, 55 /*GDK_KEY_v*/,      toggle,     { .i = Plugins } },
+    { MODKEY|GDK_SHIFT_MASK, 56 /*GDK_KEY_b*/,      toggle,     { .i = ScrollBars } },
+    { MODKEY|GDK_SHIFT_MASK, 58 /*GDK_KEY_m*/,      toggle,     { .i = Style } },
 };
 
 /* button definitions */

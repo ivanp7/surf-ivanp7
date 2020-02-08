@@ -114,7 +114,7 @@ typedef struct Client {
 
 typedef struct {
 	guint mod;
-	guint keyval;
+	guint16 keycode;
 	void (*func)(Client *c, const Arg *a);
 	const Arg arg;
 } Key;
@@ -1346,10 +1346,9 @@ winevent(GtkWidget *w, GdkEvent *e, Client *c)
 	case GDK_KEY_PRESS:
 		if (!curconfig[KioskMode].val.b) {
 			for (i = 0; i < LENGTH(keys); ++i) {
-				if (gdk_keyval_to_lower(e->key.keyval) ==
-				    keys[i].keyval &&
-				    CLEANMASK(e->key.state) == keys[i].mod &&
-				    keys[i].func) {
+				if (e->key.hardware_keycode == keys[i].keycode
+				    && CLEANMASK(e->key.state) == keys[i].mod
+				    && keys[i].func) {
 					updatewinid(c);
 					keys[i].func(c, &(keys[i].arg));
 					return TRUE;
