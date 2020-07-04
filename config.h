@@ -3,9 +3,9 @@ static int surfuseragent    = 1;  /* Append Surf version to default WebKit user 
 static char *fulluseragent  = ""; /* Or override the whole user agent string */
 static char *scriptfile     = "~/.config/surf/script.js";
 static char *styledir       = "~/.config/surf/styles/";
-static char *cachedir       = "~/.config/surf/cache/";
-static char *cookiefile     = "~/.config/surf/cookies.txt";
-static char *historyfile    = "~/.config/surf/history.txt";
+static char *cachedir       = "~/.cache/surf/cache/";
+static char *cookiefile     = "~/.cache/surf/cookies.txt";
+static char *historyfile    = "~/.cache/surf/history.txt";
 static char *wmclass        = "Surf";
 static int scroll_multiplier = 5;
 
