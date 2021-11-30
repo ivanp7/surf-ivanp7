@@ -95,7 +95,7 @@ static SiteStyle styles[] = {
         } \
 }
 
-#define SCRIPTS_DIR "~/.scripts/xdf/surf/"
+#define SCRIPTS_DIR "~/.config/surf/scripts/"
 
 /* bookmarks */
 static char *bookmarkadd_curwin [] = { "/bin/sh", "-c",
